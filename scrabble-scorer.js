@@ -48,7 +48,7 @@ function initialPrompt() {
   return userWord = input.question("Let's play some scrabble! Enter a word: ");
 };
 
-let newPointStructure;
+let newPointStructure = transform(oldPointStructure);
 
 let simpleLetterScorer ={
    name: "Simple Score",
@@ -97,7 +97,7 @@ let newScrabbleScorer = {
 };
 
 function scrabbleScorer(word){
-   newPointStructure = transform(oldPointStructure);
+  
    //console.log(newPointStructure);
    let letterScore = 0;
    word = word.toLowerCase();
@@ -119,11 +119,17 @@ const scoringAlgorithms = [simpleLetterScorer, vowelScorer,newScrabbleScorer];
 
 function scorerPrompt() {
    let validInput = false;
-   let num = input.question(`Please select a mode to score your word 
+   let num = input.question(`\nPlease select a mode to score your word!
 
-0 = simple scoring
-1 = vowel bonus scoring
-2 = standard scrabble scoring: `);
+0 = ${scoringAlgorithms[0].name}
+${scoringAlgorithms[0].description}
+
+1 = ${scoringAlgorithms[1].name}
+${scoringAlgorithms[1].description}
+
+2 = ${scoringAlgorithms[2].name}
+${scoringAlgorithms[2].description}: `);
+
 
    while(!validInput){
       if(num >= 0 && num < 3){
@@ -151,7 +157,7 @@ function transform(pointStruct) {
    }
    //console.log(tmpLetterArr);
    
-   console.log(tmpLetterArr);
+   
    
    
    /*
