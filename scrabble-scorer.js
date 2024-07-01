@@ -12,9 +12,19 @@ const oldPointStructure = {
   10: ['Q', 'Z']
 };
 
+
+
+let oldScorer = {
+   name: "Scrabble",
+   description: "The traditional scoring algorithm.",
+   scorerFunction: oldScrabbleScorer
+      
+};
+
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
 	let letterPoints = "";
+   let letterScore = 0;
  
 	for (let i = 0; i < word.length; i++) {
  
@@ -22,39 +32,147 @@ function oldScrabbleScorer(word) {
  
 		 if (oldPointStructure[pointValue].includes(word[i])) {
 			letterPoints += `Points for '${word[i]}': ${pointValue}\n`
+         letterScore = letterScore + Number(pointValue);
 		 }
  
 	  }
 	}
-	return letterPoints;
+   
+	return letterScore;
  }
 
 // your job is to finish writing these functions and variables that we've named //
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-  userWord = input.question("Let's play some scrabble! Enter a word:");
+  return userWord = input.question("Let's play some scrabble! Enter a word: ");
 };
 
 let newPointStructure;
 
-let simpleScorer;
+let simpleLetterScorer ={
+   name: "Simple Score",
+   description: "Each letter is worth 1 point.",
+   scorerFunction: simpleScorer
+};
+function simpleScorer(word){
+   
+      let tempArr = word.toUpperCase().split("");
+      let letterScore = 0;
+   
+      for(let i = 0; i < tempArr.length; i++){
+         letterScore++;
+      }
+      
+      return letterScore;
+   
+}
 
-let vowelBonusScorer;
+let vowelScorer = {
+   name: "Bonus Vowels",
+   description: "Vowels are 3 pts, consonants are 1 pt.", 
+   
+   
+   scorerFunction : vowelBonusScorer
 
-let scrabbleScorer;
+};
+
+function vowelBonusScorer(word){
+   let Vowels = "AEIOU";
+   let letterScore = 0;
+
+      for(let i = 0; i < word.length; i++){
+         if(Vowels.indexOf(word[i].toUpperCase()) !== -1){
+            letterScore += 3;
+         }else{letterScore++;}
+      }
+         
+         return letterScore;
+   }
+
+let newScrabbleScorer = {
+   name: "Scrabble",
+   description: "The traditional scoring algorithm.",
+   scorerFunction: scrabbleScorer
+};
+
+function scrabbleScorer(word){
+   newPointStructure = transform(oldPointStructure);
+   //console.log(newPointStructure);
+   let letterScore = 0;
+   word = word.toLowerCase();
+   
+   
+      for(let i = 0; i < word.length; i++){
+         for(item in newPointStructure){
+            if(item === word[i]){
+               letterScore = letterScore + newPointStructure[item];
+            }
+         }//end of nested for
+      }//end of main for
+      return letterScore;
+   }//end of function
 
 let userWord = '';
 
-const scoringAlgorithms = [];
+const scoringAlgorithms = [simpleLetterScorer, vowelScorer,newScrabbleScorer];
 
-function scorerPrompt() {}
+function scorerPrompt() {
+   let validInput = false;
+   let num = input.question(`Please select a mode to score your word 
 
-function transform() {};
+0 = simple scoring
+1 = vowel bonus scoring
+2 = standard scrabble scoring: `);
+
+   while(!validInput){
+      if(num >= 0 && num < 3){
+         validInput = true
+        
+      }else{
+         num = input.question("Please select a valid mode (0, 1, 2): ")
+      }
+   }
+   
+
+   return scoringAlgorithms[num];
+}
+
+function transform(pointStruct) {
+   let tmpPointStruct = {};
+   let tmpLetterArr = [];
+   let tmpNumberArr = [];
+
+   for (item in pointStruct){
+      for(let i = 0; i < pointStruct[item].length; i++){
+         tmpPointStruct[pointStruct[item][i].toLowerCase()] = Number(item);
+        
+      }
+   }
+   //console.log(tmpLetterArr);
+   
+   console.log(tmpLetterArr);
+   
+   
+   /*
+   for(let i = 0; i < pointStruct[item].length; i++){
+      if(tmpLetterArr[i] != pointStruct[item]){
+         tmpLetterArr[i].push(pointStruct[item]);
+         }
+      }*/
+   //console.log(tmpPointStruct);
+   return tmpPointStruct;
+}
 
 function runProgram() {
    initialPrompt();
-   console.log(oldScrabbleScorer(userWord));
+   let tmp = scorerPrompt();
+   console.log(`
+Mode: ${tmp.name}
+Score: ${tmp.scorerFunction(userWord)}
+`);
+
+  
 }
 
 // Don't write any code below this line //
