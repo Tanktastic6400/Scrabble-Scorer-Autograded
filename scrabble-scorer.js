@@ -146,8 +146,7 @@ ${scoringAlgorithms[2].description}: `);
 
 function transform(pointStruct) {
    let tmpPointStruct = {};
-   let tmpLetterArr = [];
-   let tmpNumberArr = [];
+  
 
    for (item in pointStruct){
       for(let i = 0; i < pointStruct[item].length; i++){
@@ -155,18 +154,7 @@ function transform(pointStruct) {
         
       }
    }
-   //console.log(tmpLetterArr);
    
-   
-   
-   
-   /*
-   for(let i = 0; i < pointStruct[item].length; i++){
-      if(tmpLetterArr[i] != pointStruct[item]){
-         tmpLetterArr[i].push(pointStruct[item]);
-         }
-      }*/
-   //console.log(tmpPointStruct);
    return tmpPointStruct;
 }
 
